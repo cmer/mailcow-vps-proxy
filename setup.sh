@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # This script forwards TCP traffic to a remote Mailcow (or equivalent) server setup.
-# It also sets up a Postfix relay that listens on port 2525. The remote Mailcow server 
+# It also sets up a Postfix relay that listens on port 2525. The remote Mailcow server
 # can then relay outbound traffic through port 2525.
 #
 # It is assumed that you run this script on a publicly-accessible Debian server (ie VPS) with a static IP address.
@@ -56,6 +56,11 @@ echo "Your public IP is: $public_ip"
 # Flush existing NAT rules (optional, be cautious with this)
 iptables -t nat -F
 
+# Enable IP forwarding
+sudo sysctl -w net.ipv4.ip_forward=1
+if ! grep -q "^net.ipv4.ip_forward = 1" /etc/sysctl.conf; then
+    echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.conf > /dev/null
+fi
 # Loop through each port and set up the forwarding rules
 for PORT in "${forwarded_ports[@]}"
 do
