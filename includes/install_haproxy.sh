@@ -44,7 +44,7 @@ frontend ft_http
 
 backend bk_http
     mode http
-    server http_server ${mailcow_ip}:80
+    server http_server ${mailcow_ip}:80 check inter 5000 fall 3 rise 2
 
 frontend ft_https
     bind *:443 ssl crt /etc/letsencrypt/live/${myhostname}/haproxy.pem
@@ -54,7 +54,7 @@ frontend ft_https
 
 backend bk_https
     mode http
-    server https_server ${mailcow_ip}:443 ssl verify none
+    server https_server ${mailcow_ip}:443 ssl verify none check inter 5000 fall 3 rise 2
 EOF
 
 for port in "${send_proxy_ports[@]}"; do
@@ -65,7 +65,7 @@ frontend ft_email_${port}
     default_backend bk_email_${port}
 
 backend bk_email_${port}
-    server email_server_${port} ${mailcow_ip}:${port} send-proxy
+    server email_server_${port} ${mailcow_ip}:${port} send-proxy check inter 5000 fall 3 rise 2
 EOF
 done
 
