@@ -47,6 +47,7 @@ frontend ft_email_${port}
     default_backend bk_email_${port}
 
 backend bk_email_${port}
+    source 0.0.0.0 usesrc clientip
     server email_server_${port} ${mailcow_ip}:${port} check
 EOF
 done
