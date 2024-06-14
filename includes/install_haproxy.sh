@@ -20,10 +20,21 @@ defaults
     log     global
     mode    tcp
     option  tcplog
+    option  httplog
     option  dontlognull
     timeout connect 5000
     timeout client  50000
     timeout server  50000
+
+listen stats
+    bind *:8404
+    mode http
+    stats enable
+    stats uri /haproxy?stats
+    stats refresh 10s
+    stats show-node
+    stats auth admin:${smtp_password}
+    stats admin if TRUE
 
 frontend ft_http
     bind *:80
@@ -32,7 +43,7 @@ frontend ft_http
     default_backend bk_http
 
 backend bk_http
-mode http
+    mode http
     server http_server ${mailcow_ip}:80
 
 frontend ft_https
@@ -42,7 +53,7 @@ frontend ft_https
     default_backend bk_https
 
 backend bk_https
-mode http
+    mode http
     server https_server ${mailcow_ip}:443 ssl verify none
 EOF
 
