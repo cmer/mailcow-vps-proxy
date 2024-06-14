@@ -1,0 +1,18 @@
+#
+# COPY TO config.sh AND EDIT THE FOLLOWING VARIABLES AS DESIRED
+#
+# Hostname of the publicly-assessible server
+myhostname="mail.example.com"
+mydomain="example.com"
+
+# Postfix Relay
+relay_port="2525"
+smtp_username="mailcow"
+smtp_password="a long and complicated random password"
+
+# Let's Encrypt w/ Cloudflare DNS challenge
+letsencrypt_email="john@example.com"
+cloudflare_api_token="your cloudflare token"
+
+# Remote Mailcow server IP -- Tailscale recommended
+mailcow_ip="ip address of your mailcow server that is not publicly accessible"

@@ -14,7 +14,7 @@ This script facilitates the deployment of a mail server in a homelab environment
 
 ## Features
 
-- Forwards inbound traffic on ports 25, 80, 110, 143, 443, 465, 587, 993, 995, and 4190 to your home mail server using HAProxy.
+- Forwards inbound traffic on ports 25, 80, 110, 143, 443, 465, 587, 993, and 995 to your home mail server using HAProxy.
 
 - Runs a Postfix instance on port 2525 to relay outbound mail from your home mail server.
 
@@ -27,3 +27,11 @@ This script facilitates the deployment of a mail server in a homelab environment
 3. Execute the setup script on your VPS. This will configure HAProxy to forward the necessary ports to your home mail server’s Tailscale IP, and configure Postfix to listen on port 2525.
 
 4. Configure your home mail server (Mailcow) to use the VPS as the relay host for outbound mail. Make sure you use the VPS's public IP address or hostname since Mailcow's Docker containers do not have access to the Tailscale network.
+
+5. Run the following on your Mailcow server to configure the Postfix relay:
+
+```bash
+cd /opt/mailcow-dockerized
+echo "postscreen_upstream_proxy_protocol = haproxy" >> ./data/conf/postfix/extra.cf
+docker compose restart postfix-mailcow
+```

@@ -8,33 +8,12 @@
 # I recommend setting up a VPN between the two servers. I use Tailscale for this.
 #
 
-#
-# EDIT THE FOLLOWING VARIABLES AS DESIRED
-#
-# Hostname of the publicly-assessible server
-myhostname="mail.example.com"
-mydomain="example.com"
+if [ ! -f config.sh ]; then
+    echo "config.sh not found. Copy config.sh.example to config.sh and edit as appropriate."
+    exit 1
+fi
 
-# Postfix Relay
-relay_port="2525"
-smtp_username="mailcow"
-smtp_password="a long and complicated random password"
-
-# Let's Encrypt w/ Cloudflare DNS challenge
-letsencrypt_email="john@example.com"
-cloudflare_api_token="your cloudflare token"
-
-# Remote Mailcow server IP -- Tailscale recommended
-mailcow_ip="ip address of your mailcow server that is not publicly accessible"
-
-# Ports to be forwarded to Mailcow
-forwarded_ports=(25 465 587 143 993 110 995 4190 80 443)
-
-##
-##
-## DO NOT MODIFY ANYTHING BELOW THIS LINE!
-##
-##
+source config.sh
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -45,6 +24,10 @@ fi
 public_ip=$(curl -s https://ipinfo.io/ip)
 echo "Your public IP is: $public_ip"
 
+# Ports to be forwarded to Mailcow
+transparent_ports=(143 993 110 995 80 443)
+send_proxy_ports=(25 465 587)
+
 source includes/install_syslog.sh
 
 source includes/install_haproxy.sh
@@ -52,6 +35,8 @@ source includes/install_haproxy.sh
 source includes/install_letsencrypt.sh
 
 source includes/install_postfix.sh
+
+source inclues/setup_iptables.sh
 
 echo "Done!"
 
