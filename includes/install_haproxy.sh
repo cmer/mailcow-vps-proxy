@@ -27,7 +27,7 @@ defaults
     timeout server  50000
 
 listen stats
-    bind *:8404
+    bind *:444  ssl crt /etc/letsencrypt/live/${myhostname}/haproxy.pem
     mode http
     stats enable
     stats uri /haproxy?stats
