@@ -12,8 +12,8 @@ global
     chroot /var/lib/haproxy
     stats socket /run/haproxy/admin.sock mode 660 level admin
     stats timeout 30s
-    user haproxy
-    group haproxy
+    #user haproxy
+    #group haproxy
     daemon
 
 defaults
