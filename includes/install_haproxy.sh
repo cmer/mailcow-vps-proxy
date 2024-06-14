@@ -2,6 +2,8 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y haproxy > /dev/null
 
 haproxy_config="/etc/haproxy/haproxy.cfg"
 
+echo "Creating HAProxy configuration file ${haproxy_config}"
+
 # Create the HAProxy configuration file
 cat <<EOF > $haproxy_config
 global
@@ -38,6 +40,7 @@ backend bk_email_${port}
     option tcplog
     server email_server_${port} ${mailcow_ip}:${port} send-proxy
 EOF
+done
 
 # Append frontends and backends to the configuration file
 for port in "${transparent_ports[@]}"; do
@@ -56,7 +59,6 @@ backend bk_email_${port}
 EOF
 done
 
-echo "HAProxy configuration file created at $haproxy_config"
 echo "Starting HAProxy..."
 systemctl start haproxy
 systemctl enable haproxy

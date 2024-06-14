@@ -36,7 +36,7 @@ source includes/install_letsencrypt.sh
 
 source includes/install_postfix.sh
 
-source inclues/setup_iptables.sh
+source includes/setup_iptables.sh
 
 echo "Done!"
 
