@@ -1,6 +1,10 @@
 echo "Installing iptables-persistent..."
 DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent > /dev/null
 
+modprobe xt_TPROXY
+modprobe nf_tproxy_ipv4
+modprobe nf_tproxy_ipv6
+
 if ! grep -qE '^net.ipv4.ip_forward\s*=\s*1$' /etc/sysctl.conf; then
   echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 fi
