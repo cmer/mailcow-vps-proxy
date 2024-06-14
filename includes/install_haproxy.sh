@@ -32,6 +32,7 @@ frontend ft_http
     default_backend bk_http
 
 backend bk_http
+mode http
     server http_server ${mailcow_ip}:80
 
 frontend ft_https
@@ -41,6 +42,7 @@ frontend ft_https
     default_backend bk_https
 
 backend bk_https
+mode http
     server https_server ${mailcow_ip}:443 ssl verify none
 EOF
 
