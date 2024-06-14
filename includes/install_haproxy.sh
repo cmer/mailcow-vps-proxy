@@ -31,13 +31,9 @@ for port in "${send_proxy_ports[@]}"; do
 
 frontend ft_email_${port}
     bind *:${port}
-    mode tcp
-    option tcplog
     default_backend bk_email_${port}
 
 backend bk_email_${port}
-    mode tcp
-    option tcplog
     server email_server_${port} ${mailcow_ip}:${port} send-proxy
 EOF
 done
@@ -48,13 +44,9 @@ for port in "${transparent_ports[@]}"; do
 
 frontend ft_email_${port} transparent
     bind *:${port}
-    mode tcp
-    option tcplog
     default_backend bk_email_${port}
 
 backend bk_email_${port}
-    mode tcp
-    option tcplog
     server email_server_${port} ${mailcow_ip}:${port} check
 EOF
 done
