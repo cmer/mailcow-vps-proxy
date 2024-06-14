@@ -24,9 +24,8 @@ fi
 public_ip=$(curl -s https://ipinfo.io/ip)
 echo "Your public IP is: $public_ip"
 
-# Ports to be forwarded to Mailcow
-transparent_ports=(143 993 110 995 80 443)
-send_proxy_ports=(25 465 587)
+# Ports to be proxied to Mailcow
+send_proxy_ports=(25 465 587 143 110 993 995)
 
 source includes/install_syslog.sh
 

@@ -12,8 +12,8 @@ global
     chroot /var/lib/haproxy
     stats socket /run/haproxy/admin.sock mode 660 level admin
     stats timeout 30s
-    #user haproxy
-    #group haproxy
+    user haproxy
+    group haproxy
     daemon
 
 defaults
@@ -24,6 +24,24 @@ defaults
     timeout connect 5000
     timeout client  50000
     timeout server  50000
+
+frontend ft_http
+    bind *:80
+    mode http
+    option forwardfor
+    default_backend bk_http
+
+backend bk_http
+    server http_server ${mailcow_ip}:80
+
+frontend ft_https
+    bind *:443 ssl crt /etc/letsencrypt/live/${myhostname}/haproxy.pem
+    mode http
+    option forwardfor
+    default_backend bk_https
+
+backend bk_https
+    server https_server ${mailcow_ip}:443 ssl verify none
 EOF
 
 for port in "${send_proxy_ports[@]}"; do
@@ -38,20 +56,8 @@ backend bk_email_${port}
 EOF
 done
 
-# Append frontends and backends to the configuration file
-for port in "${transparent_ports[@]}"; do
-    cat <<EOF >> $haproxy_config
-
-frontend ft_email_${port}
-    bind *:${port} transparent
-    default_backend bk_email_${port}
-
-backend bk_email_${port}
-    source 0.0.0.0 usesrc clientip
-    server email_server_${port} ${mailcow_ip}:${port} check
-EOF
-done
+cat /etc/letsencrypt/live/${myhostname}/fullchain.pem /etc/letsencrypt/live/${myhostname}/privkey.pem > /etc/letsencrypt/live/${myhostname}/haproxy.pem
 
 echo "Starting HAProxy..."
-systemctl start haproxy
+systemctl restart haproxy
 systemctl enable haproxy
