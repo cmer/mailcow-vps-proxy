@@ -42,8 +42,8 @@ done
 for port in "${transparent_ports[@]}"; do
     cat <<EOF >> $haproxy_config
 
-frontend ft_email_${port} transparent
-    bind *:${port}
+frontend ft_email_${port}
+    bind *:${port} transparent
     default_backend bk_email_${port}
 
 backend bk_email_${port}
