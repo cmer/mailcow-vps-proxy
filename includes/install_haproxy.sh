@@ -20,7 +20,6 @@ defaults
     log     global
     mode    tcp
     option  tcplog
-    option  httplog
     option  dontlognull
     timeout connect 5000
     timeout client  50000
@@ -41,10 +40,11 @@ for port in "${send_proxy_ports[@]}"; do
     cat <<EOF >> $haproxy_config
 
 frontend ft_email_${port}
-    bind *:${port}
+    bind *:${port} transparent
     default_backend bk_email_${port}
 
 backend bk_email_${port}
+    source 0.0.0.0 usesrc clientip
     server email_server_${port} ${mailcow_ip}:${port} send-proxy check inter 5000 fall 3 rise 2
 EOF
 done
