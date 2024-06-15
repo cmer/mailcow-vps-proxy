@@ -27,7 +27,7 @@ defaults
     timeout server  50000
 
 listen stats
-    bind *:444  ssl crt /etc/letsencrypt/live/${myhostname}/haproxy.pem
+    bind *:444  ssl crt /etc/letsencrypt/live/${mydomain}/haproxy.pem
     mode http
     stats enable
     stats uri /haproxy?stats
@@ -35,26 +35,6 @@ listen stats
     stats show-node
     stats auth admin:${smtp_password}
     stats admin if TRUE
-
-frontend ft_http
-    bind *:80
-    mode http
-    option forwardfor
-    default_backend bk_http
-
-backend bk_http
-    mode http
-    server http_server ${mailcow_ip}:80 check inter 5000 fall 3 rise 2
-
-frontend ft_https
-    bind *:443 ssl crt /etc/letsencrypt/live/${myhostname}/haproxy.pem
-    mode http
-    option forwardfor
-    default_backend bk_https
-
-backend bk_https
-    mode http
-    server https_server ${mailcow_ip}:443 ssl verify none check inter 5000 fall 3 rise 2
 EOF
 
 for port in "${send_proxy_ports[@]}"; do
@@ -69,7 +49,7 @@ backend bk_email_${port}
 EOF
 done
 
-cat /etc/letsencrypt/live/${myhostname}/fullchain.pem /etc/letsencrypt/live/${myhostname}/privkey.pem > /etc/letsencrypt/live/${myhostname}/haproxy.pem
+cat /etc/letsencrypt/live/${mydomain}/fullchain.pem /etc/letsencrypt/live/${mydomain}/privkey.pem > /etc/letsencrypt/live/${mydomain}/haproxy.pem
 
 echo "Starting HAProxy..."
 systemctl restart haproxy

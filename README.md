@@ -35,6 +35,6 @@ cd /opt/mailcow-dockerized
 echo "postscreen_upstream_proxy_protocol = haproxy" >> ./data/conf/postfix/extra.cf
 docker compose restart postfix-mailcow
 
-echo "set_real_ip_from <<---PRIVATE IP OF YOUR VPS--->>;" > /opt/mailcow-dockerized/data/conf/nginx/site.tailscale-proxy.custom
+echo "set_real_ip_from <<---PRIVATE IP OF YOUR VPS--->>;" > ./data/conf/nginx/site.tailscale-proxy.custom
 docker compose restart nginx-mailcow
 ```

@@ -19,3 +19,4 @@ EOF
 # Get certificate for the first time
 echo "Getting SSL certificates..."
 certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini -d $myhostname --non-interactive --agree-tos --email $letsencrypt_email
+certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini -d *.$mydomain --non-interactive --agree-tos --email $letsencrypt_email
