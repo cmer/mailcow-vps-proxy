@@ -1,6 +1,11 @@
 # Let's Encrypt w/ Cloudflare DNS challenge
 echo "Installing Let's Encrypt..."
-DEBIAN_FRONTEND=noninteractive apt-get install -y certbot python3-certbot-dns-cloudflare > /dev/null
+apt update
+DEBIAN_FRONTEND=noninteractive apt-get install -y snapd > /dev/null
+snap install --classic certbot
+snap set certbot trust-plugin-with-root=ok
+snap install --classic certbot-dns-cloudflare
+ln -fs /snap/bin/certbot /usr/bin/certbot
 
 # Configure Cloudflare DNS plugin with API credentials
 mkdir -p /etc/letsencrypt
