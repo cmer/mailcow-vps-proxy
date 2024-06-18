@@ -1,11 +1,8 @@
 #!/bin/bash
 #
-# This script forwards TCP traffic to a remote Mailcow (or equivalent) server setup.
-# It also sets up a Postfix relay that listens on port 2525. The remote Mailcow server
-# can then relay outbound traffic through port 2525.
+# Configures a Postfix relay that listens on port 2525.
 #
 # It is assumed that you run this script on a publicly-accessible Debian server (ie VPS) with a static IP address.
-# I recommend setting up a VPN between the two servers. I use Tailscale for this.
 #
 
 if [ ! -f config.sh ]; then
@@ -24,18 +21,11 @@ fi
 public_ip=$(curl -s https://ipinfo.io/ip)
 echo "Your public IP is: $public_ip"
 
-# Ports to be proxied to Mailcow
-send_proxy_ports=(25 465 587 143 110 993 995)
-
 source includes/install_syslog.sh
-
-source includes/install_haproxy.sh
 
 source includes/install_letsencrypt.sh
 
 source includes/install_postfix.sh
-
-source includes/setup_iptables.sh
 
 echo "Done!"
 

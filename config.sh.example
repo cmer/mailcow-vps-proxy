@@ -13,6 +13,3 @@ smtp_password="a long and complicated random password"
 # Let's Encrypt w/ Cloudflare DNS challenge
 letsencrypt_email="john@example.com"
 cloudflare_api_token="your cloudflare token"
-
-# Remote Mailcow server IP -- Tailscale recommended
-mailcow_ip="ip address of your mailcow server that is not publicly accessible"
